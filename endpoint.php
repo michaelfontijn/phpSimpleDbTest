@@ -7,12 +7,22 @@
  */
 
 include 'DatabaseManager.php';
-include 'Models/User.php';
+include_once 'Models/User.php';
 
 
 $dbManager = new DatabaseManager();
 
-switch ($_POST['action']) {
+$action = "";
+
+//check if it is an post or a get (dirty!) ;p
+if(!empty($_POST['action'])){
+    $action = $_POST['action'];
+}else{
+    $action = $_GET['action'];
+}
+
+
+switch ($action) {
     case "insertUser":
 
         //convert the url encoded param string to an php array
@@ -28,13 +38,19 @@ switch ($_POST['action']) {
 
         //create the user object, using the retrieve input field values
         $userObj = new User($username,$password,$firstName,$lastName);
-        //$userObj->setUsername($data);
 
         //ask the dbManager to insert the new user into the database
         $dbManager->insertUser($userObj);
         break;
     case "getUsers":
-        $dbManager->getUsers();
+        $users = $dbManager->getUsers();
+
+        foreach ($users as $user){
+            echo "<br/>";
+            echo $user->getUsername();
+        }
+
+        //echo(print_r($users));
 }
 
 

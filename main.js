@@ -8,6 +8,20 @@ $(document).on('click' ,'.submitTest', function(){
 
     $.post('endpoint.php', {action : "insertUser", user : formData}, function(data){
         console.log(data);
+        reloadUsers()
     });
 
+})
+
+function reloadUsers(){
+    $.get('endpoint.php', {action: "getUsers"}, function(data){
+        var placeholder = $('#userPlaceholder');
+        placeholder.html("");
+        placeholder.append(data);
+    })
+}
+
+
+$(function(){
+    reloadUsers();
 })
